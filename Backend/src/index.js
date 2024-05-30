@@ -1,9 +1,15 @@
 const express = require("express");
 const cors = require("cors");
-const port = 8000;
+require("dotenv").config()
+
+const port = process.env.PORT || 8000;
+
+const connectDB = require("./database/db");
+connectDB();
 
 const blogRoutes = require("./routes/blogRoutes");
-const categoryRoutes = require("./routes/blogRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
+const authorRoutes = require("./routes/authorRoutes");
 
 const app = express();
 
@@ -15,10 +21,11 @@ app.use(express.json());
 
 app.use("/api/blogs", blogRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/authors", authorRoutes);
 
-app.get('/', (req, res) => {
-    res.send("Sawubona, unjani!");
-});
+// app.get('/', (req, res) => {
+//     res.send("Sawubona, unjani!");
+// });
 
 app.listen(port, () => {
     console.log(`IX blogging app listening on port ${port}`)
