@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Site</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="index.css">
+    <script src="index.js"></script>
+    </head>
+    <body>
+        <h1>Hello-Bootstrap</h1>
+        <div class="d-Flex w-100 h-100 justfiy-content-center; align-items-center;">
+            <div class="col-4">
+                <form id="registerForm">
+                    <h1>Login</h1>
+                    <div class="form-floating mb-3">
+                        <input 
+                            type="email" 
+                            class="form-control" 
+                            id="email" 
+                            placeholder="name@example.com">
+                            required
+                        <label for="email">Email address</label>
+                    </div>
+                    <div class="form-floating">
+                        <input 
+                            type="password" 
+                            class="form-control" 
+                            id="pass" 
+                            placeholder="Password">
+                            required
+                        <label for="pass">Password</label>
+                    </div>
+                </form>
+                <div class="my-1">
+                    <a href="../register/">Register</a>
+                </div>
+                <button 
+                    class="btn btn-primary w-100 my-3" 
+                    type="button"
+                    onclick="onSubmit()"
+                >
+                    Register
+                </button>
+            </div>
+        </div>
+    </body>
+</html>
