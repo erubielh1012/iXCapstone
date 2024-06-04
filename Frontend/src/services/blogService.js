@@ -7,7 +7,7 @@ const createBlog = async (blog) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: blog,
+      body: JSON.stringify(blog),
     });
 
     if (!response.ok) {
@@ -47,7 +47,7 @@ const fetchBlogs = async () => {
   }
 
   const blogsApiData = await response.json();
-  return blogsApiData;
+  return blogsApiData.data;
 };
 
 const fetchBlogById = async (id) => {
@@ -74,14 +74,17 @@ const fetchBlogById = async (id) => {
 const fetchBlogsByCategoryId = async ( categoryId ) => {
   console.log("Trying to grab filtered blogs by cats ID")
 
+  console.log("http://localhost:8000/api/blogs/category/" + categoryId);
+
   const data = await fetch(
-    ("http://localhost:8000/api/blogs/category/" + categoryId),
+    "http://localhost:8000/api/blogs/category/" + categoryId,
     {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
+
 
     if (!data.ok) {
       try {

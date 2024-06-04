@@ -57,8 +57,10 @@ export default function AddEditBlogModal({ addBlog, editBlog, categories, create
     };
 
     const onSubmit = (e) => {
+        console.log("has submitted");
         e.preventDefault();
         if (isFormValid()) {
+            console.log("Form was valid");
             if (editBlog) {
                 updateBlog(blog);
             } else {
@@ -66,7 +68,7 @@ export default function AddEditBlogModal({ addBlog, editBlog, categories, create
             }
             resetBlog();
             addEditBlogModal.hide();
-        }
+        } else { console.log("Form was NOT valid"); }
     };
 
     const isFormValid = () => {

@@ -9,19 +9,19 @@ const createBlog = async (req, res) => {
             author: req?.body?.author,
             image: req?.body?.image,
             title: req?.body?.title,
-            categoryIds: req.body.categoryIds,
+            categories: categoryIds,
             description: req?.body?.description,
             content: req?.body?.content,
         });
 
         const newBlog = await blog.save();
         const blogRes = await Blog.findById(newBlog._id).populate({
-            path: "categoryIds",
+            path: "categories",
         });
         
         res.status(200).json({ 
             message: "Created new blog!", 
-            data: blog });
+            data: blogRes });
     } catch (error) { 
         res.status(500).json({
             message: error.message,
@@ -32,7 +32,7 @@ const createBlog = async (req, res) => {
   
 const getBlogs = async (req, res) => {
     try {
-        const blogs = await Blog.find().populate({ path: "categroyIds" });
+        const blogs = await Blog.find().populate({ path: "categories" });
     
         res.status(200).json({ 
             message: "Return all blogs!", 
@@ -66,14 +66,18 @@ const getBlogById = async (req, res) => {
 // not sure how this one works
 const getBlogsByCategoryId = async (req, res) => {
     try {
-        console.log(req.params.id);
+        console.log("We want to get the blogs with catId of", req.params.id);
         let filter = {};
         if (req.params.id != "null" && req.params.id != "undefined"){
-            filter = {categoryIds: req.params.id};
+            filter = {categories: req.params.id};
         }
 
-        const blogs = await Blog.find(filter).populate({ path: "categoryIds" });
+        console.log("The filter is created:", filter);
+
+        const blogs = await Blog.find(filter).populate({ path: "categories" });
         
+        console.log("Filter applied to blogs:", blogs);
+
         res.status(200).json({ 
             message: "Return blog by the category ID!", 
             data: blogs });
@@ -96,18 +100,19 @@ const updateBlogById = async (req, res) => {
             blog.image = req?.body?.image || blog.image;
             blog.title = req?.body?.title || blog.title;
             blog.description = req?.body?.description || blog.description;
-            blog.categoryIds = categoryIds ? categoryIds : blog.categoryIds;
+            blog.categories = categoryIds ? categoryIds : blog.categories;
             blog.author = req?.body?.author || blog.author;
             blog.content = req.body.content ? req.body.content : blog.content;
             const updatedBlog = await blog.save();
             const blogRes = await updatedBlog.populate({
-                path: "categoryIds",
+                path: "categories",
             });
+            res.status(200).json({ 
+                message: "Updated blog by ID!", 
+                data: blogRes });
+        } else {
+            res.status(404).json({ message: "Blog not found!", data: [] });
         };
-        
-        res.status(200).json({ 
-            message: "Updated blog by ID!", 
-            data: updatedBlog });
     } catch (error) {
         res.status(500).json({
             message: error.message,
@@ -121,14 +126,13 @@ const deleteBlogById = async (req, res) => {
         const blog = await Blog.findByIdAndRemove(req.params.id);
     
         if (blog) {
-            return res.status(200).json({ message: "Blog deleted!"})
+            return res.status(200).json({ message: "Blog deleted!", id: req.params.id})
         } else {
             return res.status(404).json({ message: "Blog not found!" });
         }
     } catch (error) {
         res.status(500).json({
             message: error.message,
-            data: [],
         });
     }
 };

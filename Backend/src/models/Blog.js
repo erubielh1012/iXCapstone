@@ -14,12 +14,12 @@ const blogSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    categoryIds: {
+    categories: {
       type: [mongoose.Schema.Types.ObjectId],
       required: true,
       ref: "Category"
     },
-    authorId: {
+    author: {
       type: Map,
       of: mongoose.Schema.Types.Mixed,
       required: true,
@@ -34,10 +34,10 @@ const blogSchema = new mongoose.Schema(
 
 // Add a toJSON method to the schema to control the output of blog instances
 blogSchema.method("toJSON", function () {
-  const { __v, _id, categoryIds, ...object } = this.toObject();
+  const { __v, _id, categories, ...object } = this.toObject();
   object.id = _id;
 
-  object.categories = categoryIds.map((category) => {
+  object.categories = categories.map((category) => {
     return {
       id: category._id,
       title: category.title,
