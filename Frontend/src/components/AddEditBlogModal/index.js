@@ -6,38 +6,34 @@ import Loading from '../../components/Loading';
 import SuccessToast from '../../components/SuccessToast';
 import ErrorToast from '../../components/ErrorToast';
 
-export default function AddEditBlogModal({ addBlog, editBlog, categories, createBlog, updateBlog }) {
+export default function AddEditBlogModal({ 
+    addBlog, 
+    editBlog, 
+    categories, 
+    createBlog, 
+    updateBlog,
+    onClose,
+}) {
+
+    const user = JSON.parse(localStorage.getItem("user"));
 
     const modalEl = document.getElementById("addEditBlogModal")
     // const addEditModal = new Modal(addEditModalDom);
-    const addEditBlogModal = useMemo(() => {
+    const addEditModal = useMemo(() => {
         return modalEl ? new Modal(modalEl) : null;
       }, [modalEl]);
 
-    const [isError, setIsError] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
-    const [message, setMessage] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-
-    const [blogImage, setBlogImage] = useState("");
-    const [blog, setBlog] = useState({
-        image: "",
-        title: "",
-        description: "",
-        categories: [],
-        content: [],
-        authorId: "",
-    });
+    const [blog, setBlog] = useState();
 
     useEffect(() => {
         if (addBlog) {
             setBlog(addBlog);
-            addEditBlogModal?.show();
+            addEditModal.show();
         } else if (editBlog) {
             setBlog(editBlog);
-            addEditBlogModal?.show();
+            addEditModal.show();
         } 
-    }, [addBlog, editBlog, addEditBlogModal]);
+    }, [addBlog, editBlog, addEditModal]);
 
     const resetBlog = () => {
         setBlog({
@@ -46,37 +42,36 @@ export default function AddEditBlogModal({ addBlog, editBlog, categories, create
             description: "",
             categories: [],
             content: [],
-            authorId: "",
+            authorId: user?.id,
         });
     };
 
-    const onClose = (e) => {
-        e.preventDefault();
+    const onCloseModal = () => {
         resetBlog();
-        addEditBlogModal.hide();
+        addEditModal?.hide();
+        onClose();
     };
 
     const onSubmit = (e) => {
         console.log("has submitted");
-        e.preventDefault();
+        e?.preventDefault();
         if (isFormValid()) {
             console.log("Form was valid");
-            if (editBlog) {
-                updateBlog(blog);
-            } else {
+            if (addBlog) {
                 createBlog(blog);
+            } else if (editBlog) {
+                updateBlog(blog);
             }
             resetBlog();
-            addEditBlogModal.hide();
+            addEditModal?.hide();
         } else { console.log("Form was NOT valid"); }
     };
 
     const isFormValid = () => {
         const form = document.getElementById("blogForm");
-        const hasCategories = blog?.categories?.length > 0;
-        form?.elements[1].setCustomValidity(hasCategories ? "" : "Invalid");
+        // form?.elements[1].setCustomValidity(hasCategories ? "" : "Invalid");
         form?.classList?.add("was-validated");
-        return form?.checkValidity() && hasCategories;
+        return form?.checkValidity();
     };
 
     if (isLoading) {
@@ -96,13 +91,13 @@ export default function AddEditBlogModal({ addBlog, editBlog, categories, create
                         <h1 
                             className="modal-title fs-5" 
                             id="addEditBlogModalLabel">
-                            {(addBlog && "Add Blog") || "Edit Blog"}
+                            {(addBlog && "Add AA Blog") || "Edit Blog"}
                         </h1>
                         <button
                             type="button"
                             className="btn-close"
                             aria-label="Close"
-                            onClick={onClose}
+                            onClick={onCloseModal}
                         ></button>
                     </div>
                 <div className="modal-body">
@@ -307,7 +302,7 @@ export default function AddEditBlogModal({ addBlog, editBlog, categories, create
                     <button
                         type="button"
                         className="btn btn-secondary"
-                        onClick={onClose}
+                        onClick={onCloseModal}
                     >
                         Close
                     </button>

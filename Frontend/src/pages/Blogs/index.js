@@ -31,6 +31,8 @@ export default function BlogsPage() {
   const [isError, setIsError] = useState();
   const [message, setMessage] = useState();
 
+  const user = JSON.parse(localStorage.getItem("user"));
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -40,7 +42,7 @@ export default function BlogsPage() {
       const blogsRes = categoryId ? await blogService.fetchBlogsByCategoryId(categoryId) : await blogService.fetchBlogs();
 
       const categoriesRes = await categoryService.fetchCategories();
-      setBlogs(blogsRes.data);
+      setBlogs(blogsRes);
       setCategories(categoriesRes.data);
       setLoading(false);
     } catch(error) {
@@ -59,13 +61,7 @@ export default function BlogsPage() {
       title: "",
       description: "",
       categories: [],
-      author: {
-        // id: 1,
-        firstName: "Byron",
-        lastName: "de Villiers",
-        bio: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-        image: "some-image",
-      },
+      author: user._id,
       content: [
         {
           sectionHeader: "Introduction",
@@ -162,6 +158,15 @@ export default function BlogsPage() {
     });
   };
 
+  const AddButton = () => {
+    if(!user?.token) return null;
+    return (
+      <button className="btn btn-outline-dark h-75" onClick={onBlogAdd}>
+        ADD BLOG
+      </button>
+    );
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -176,9 +181,7 @@ export default function BlogsPage() {
         </div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <p className="page-subtitle">Blog Posts</p>
-          <button className="btn btn-outline-dark h-75" onClick={onBlogAdd}>
-            ADD BLOG
-          </button>
+          <AddButton />
         </div>
         <BlogList
           blogPosts={blogs}
@@ -191,6 +194,10 @@ export default function BlogsPage() {
           editBlog={editBlog}
           createBlog={createBlog}
           updateBlog={updateBlog}
+          onClose={() => {
+            setAddBlog(null);
+            setEditBlog(null);
+          }}
         />
         <DeleteBlogModal
           deleteBlog={deleteBlog}

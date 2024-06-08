@@ -12,38 +12,19 @@ export default function BlogList({ blogPosts, setEditBlog, setDeleteBlog }) {
     <div className="blog-posts">
       {blogPosts.map((blogPost, index) => {
         return (
-            <div
-              key={index} 
-              style={{width: "100%"}}
-            >
             <BlogItem
+              key={index} 
               index={index}
               blogPost={blogPost}
-              // setBlog={() => {}}
               imageOrientation={"top"}
               setEditBlog={setEditBlog}
               setDeleteBlog={setDeleteBlog}
             />
-            </div>
         );
       })}
     </div>
   );
 }
-
-  //   <div className="d-flex">
-  //           {blogs.map((blog, index) => {
-  //                   <BlogItem
-  //               key={index}
-  //                   index={index}
-  //                   blogsPost={blog}
-  //                   setBlog={() => {}}
-  //                   imageOrientation={"top"}
-  //                   />;
-  //           })}
-  //   </div>
-
-  // );
 
 BlogList.propTypes = {
   blogPosts: PropTypes.array.isRequired,

@@ -8,6 +8,8 @@ import EditButtons from "../EditButtons";
 
 export default function CategoryList({ categories, onEdit, onDelete }) {
 
+  const user = JSON.parse(localStorage.getItem("user"));
+
   if (!categories || !categories?.length) {
     return null;
   }
@@ -20,7 +22,7 @@ export default function CategoryList({ categories, onEdit, onDelete }) {
             key={category.id}
             className="card"
             style={{ borderRadius: "0px", border: "none" }}
-            to={`/categories`}
+            to={`/blogs/` + category.id}
           >
             <div
               className="card-body w-100"
@@ -37,10 +39,12 @@ export default function CategoryList({ categories, onEdit, onDelete }) {
                 {category.description.substring(1, 100)} ...
               </p>
             </div>
-            {onEdit && onDelete && (
-              <EditButtons onEdit={()=>{
+            {user && user.token && onEdit && onDelete && (
+              <EditButtons 
+              onEdit={()=>{
                 onEdit(category);
-              }} onDelete={()=>{
+              }} 
+              onDelete={()=>{
                 onDelete(category);
               }} />
             )}

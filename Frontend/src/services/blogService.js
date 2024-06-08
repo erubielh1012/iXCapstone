@@ -6,6 +6,7 @@ const createBlog = async (blog) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + JSON.parse(localStorage.getItem("user")).token,
       },
       body: JSON.stringify(blog),
     });
@@ -13,7 +14,7 @@ const createBlog = async (blog) => {
     if (!response.ok) {
       try {
         let res = await response.json();
-        throw res.message || console.log(res);
+        throw res.message || JSON.stringify(res);
       } catch (err) {
         console.log(err);
         const error = new Error("Something went wrong!");
@@ -69,6 +70,9 @@ const fetchBlogById = async (id) => {
       throw new Error(error);
     }
   }
+  
+  const blogsApiData = await data.json();
+  return blogsApiData.data;
 }
 
 const fetchBlogsByCategoryId = async ( categoryId ) => {
@@ -100,10 +104,10 @@ const fetchBlogsByCategoryId = async ( categoryId ) => {
 };
 
 const fetchBlogsByAuthorId = async ( authorId ) => {
-  console.log("Trying to grab filtered blogs by cats ID")
+  console.log("Trying to grab filtered blogs by author's ID")
 
   const data = await fetch(
-    ("http://localhost:8000/api/blogs/category/" + authorId),
+    ("http://localhost:8000/api/blogs/author/" + authorId),
     {
       method: "GET",
       headers: {
@@ -131,6 +135,7 @@ const updateBlogById = async (blog) => {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: "Bearer " + JSON.parse(localStorage.getItem("user")).token,
     },
     body: JSON.stringify(blog),
   });
@@ -154,6 +159,7 @@ const deleteBlogById = async (id) => {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
+      Authorization: "Bearer " + JSON.parse(localStorage.getItem("user")).token,
     },
   });
 

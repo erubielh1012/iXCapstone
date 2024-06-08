@@ -9,7 +9,7 @@ connectDB();
 
 const blogRoutes = require("./routes/blogRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
-const authorRoutes = require("./routes/authorRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
@@ -21,7 +21,7 @@ app.use(express.json());
 
 app.use("/api/blogs", blogRoutes);
 app.use("/api/categories", categoryRoutes);
-app.use("/api/authors", authorRoutes);
+app.use("/api/auth", authRoutes);
 
 // app.get('/', (req, res) => {
 //     res.send("Sawubona, unjani!");

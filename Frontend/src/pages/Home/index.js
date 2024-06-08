@@ -30,7 +30,7 @@ export default function Home() {
         const blogsRes = await blogService.fetchBlogs();
         const catRes = await categoryService.fetchCategories();
 
-        setBlogs(blogsRes.data);
+        setBlogs(blogsRes);
         setCategories(catRes.data);
 
         setIsSuccess(true);

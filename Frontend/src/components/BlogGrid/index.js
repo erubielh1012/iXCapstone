@@ -12,7 +12,7 @@ export default function BlogGrid({ blogPosts }) {
 
     return (
         <>
-        <div className="blog-grid-container">
+        <div className="blog-grid-container py-2 w-100">
             <div className="item-1">
             {blogPosts.length > 0 && (
                 <BlogItem

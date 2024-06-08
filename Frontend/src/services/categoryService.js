@@ -6,8 +6,9 @@ const createCategory = async (category) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + JSON.parse(localStorage.getItem("user")).token,
       },
-      body: category
+      body: JSON.stringify(category),
     });
 
   if (!response.ok) {
@@ -55,6 +56,7 @@ const updateCategory = async (category) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + JSON.parse(localStorage.getItem("user")).token,
       },
       body: category
     });
@@ -81,6 +83,7 @@ const updateCategory = async (category) => {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + JSON.parse(localStorage.getItem("user")).token,
         },
       });
 

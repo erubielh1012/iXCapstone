@@ -3,21 +3,30 @@ const Blog = require("../models/Blog");
 // this is all the routes code for blogs
 const createBlog = async (req, res) => {
     try {
+        console.log("CHKPT 1");
+
         const categoryIds = req?.body?.categories.map((x) => x.id);
 
+        console.log("CHKPT 2");
+
         const blog = new Blog({
-            author: req?.body?.author,
-            image: req?.body?.image,
-            title: req?.body?.title,
+            author: req.body.author,
+            image: req.body.image,
+            title: req.body.title,
             categories: categoryIds,
-            description: req?.body?.description,
-            content: req?.body?.content,
+            description: req.body.description,
+            content: req.body.content,
         });
 
+        console.log("CHKPT 3:", req.body.author);
+
         const newBlog = await blog.save();
-        const blogRes = await Blog.findById(newBlog._id).populate({
-            path: "categories",
-        });
+        console.log("CHKPT 4");
+        const blogRes = await Blog.findById(newBlog._id)
+        .populate({ path: "categories" })
+        .populate({ path: "author" });
+
+        console.log("CHKPT 5:", blogRes);
         
         res.status(200).json({ 
             message: "Created new blog!", 
@@ -32,7 +41,7 @@ const createBlog = async (req, res) => {
   
 const getBlogs = async (req, res) => {
     try {
-        const blogs = await Blog.find().populate({ path: "categories" });
+        const blogs = await Blog.find().populate({ path: "author" }).populate({ path: "categories" });
     
         res.status(200).json({ 
             message: "Return all blogs!", 
@@ -49,8 +58,8 @@ const getBlogById = async (req, res) => {
     try {
         console.log(req.params.id);
         const blog = await Blog.findById(req.params.id).populate({
-            path: "categoryIds",
-        });;
+            path: "categories",
+        }).populate({ path: "author" });
         
         res.status(200).json({ 
             message: "Return blog by the BLOG ID!", 
@@ -74,7 +83,7 @@ const getBlogsByCategoryId = async (req, res) => {
 
         console.log("The filter is created:", filter);
 
-        const blogs = await Blog.find(filter).populate({ path: "categories" });
+        const blogs = await Blog.find(filter).populate({ path: "categories" }).populate({ path: "author" });
         
         console.log("Filter applied to blogs:", blogs);
 
@@ -89,11 +98,36 @@ const getBlogsByCategoryId = async (req, res) => {
     }
 };
 
+const getBlogsByAuthorId = async (req,res) => {
+    try {
+        console.log("Retrieving all the blogs by AUTHOR ID", req.params.id);
+        let filter = {};
+        if (req.params.id != "null" && req.params.id != "undefined"){
+            filter = {author: req.params.id};
+        }
+
+        console.log("The filter is created:", filter);
+
+        const blogs = await Blog.find(filter).populate({ path: "categories" }).populate({ path: "author" });
+        
+        console.log("Filter applied to blogs:", blogs);
+
+        res.status(200).json({ 
+            message: "Return blogs by the Author ID!", 
+            data: blogs });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message,
+            data: [],
+        });
+    }
+}
+
 const updateBlogById = async (req, res) => {
     try{
         const blog = await Blog.findById(req.params.id).populate({
-            path: "categoryIds",
-        });;
+            path: "categories",
+        }).populate({ path: "author" });
     
         if (blog) {
             const categoryIds = req?.body?.categories.map((x) => x.id);
@@ -141,9 +175,33 @@ module.exports = {
 getBlogs,
 // getBlog,
 getBlogsByCategoryId,
+getBlogsByAuthorId,
 getBlogById,
 createBlog,
 updateBlogById,
 deleteBlogById,
   };
   
+
+//   {
+//     "image": "https://png.pngtree.com/thumb_back/fh260/background/20230720/pngtree-blue-and-purple-neon-star-3d-art-background-with-a-cool-image_3705286.jpg",
+//     "title": "Booty calls is a thing",
+//     "description": "Why do booty calls occur?",
+//     "categories": [
+//         {
+//             "color": "#026AA2",
+//             "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+//             "id": "66587f6f3c15f9f00128865b",
+//             "title": "Web Development"
+//         }
+//     ],
+//     "author": [
+//         {
+//             "firstName": "Byron",
+//             "lastName": "de Villiers",
+//             "image": "some-image",
+//             "bio": "Did great stuff trust."
+//         }
+//     ],
+//     "content": "hey we did it"
+// }

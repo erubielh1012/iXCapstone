@@ -12,39 +12,44 @@ import "./index.css";
 export default function BlogItem({
     index,
     blogPost,
-    // setBlog,
     imageOrientation,
-    setEditBlog,
-    setDeleteBlog,
+    setBlogEdit,
+    setBlogDelete,
 }) {
 
-  const EditButtonsContainer = () => {
-    <EditButtons
-      onEdit={() => setEditBlog(blogPost)}
-      onDelete={() => setDeleteBlog(blogPost)}
-    />
-  };
+    const user = JSON.parse(localStorage.getItem("user"));
+    
+    const nav = useNavigate();
 
-  const nav = useNavigate();
+    const navToBlog = () => {
+      if (!setBlogEdit && !setBlogDelete) {
+        nav(`/blog/${blogPost.id}`);
+      }
+    };
 
-  // const navigateToBlog()=>{
-  // }
+    const EditButtonsContainer = () => {
+      <EditButtons
+        onEdit={() => setBlogEdit(blogPost)}
+        onDelete={() => setBlogDelete(blogPost)}
+        navToBlog={() => navigate("/blog/" + blogPost.id)}
+      />
+    };
+
 
     if (imageOrientation === "top") {
         return (
           <div
             key={index}
-            className="card-1"
-            // onClick={() => nav("/blogs/" + blogPost.id)}
-            to={"/blog/" + blogPost.id}
+            className="card-1 w-100"
+            // to={"/blog/" + blogPost.id}
+            onClick={(navToBlog)}
           >
             <img src={blogPost.image} className="card-img-top" alt="..." />
             <div className="card-text-bottom">
               <BlogItemText
                 blogPost={blogPost}
-                headerFontSize="20px"
-              ></BlogItemText>
-              <EditButtonsContainer />
+                headerFontSize="20px"/>
+                 <EditButtonsContainer/>
             </div>
           </div>
         );
@@ -53,20 +58,19 @@ export default function BlogItem({
           <div
             key={index}
             className="card-2"
-            onClick={() => nav("/blogs/" + blogPost.id)}
+            onClick={navToBlog}
           >
             <img src={blogPost.image} className="card-img-left" alt="..." />
             <div className="card-text-right">
               <BlogItemText
                 blogPost={blogPost}
-                headerFontSize="20px"
-              ></BlogItemText>
+                headerFontSize="20px" />
+                < EditButtonsContainer />
             </div>
-            <EditButtonsContainer />
           </div>
         );
       }
-}
+  }
 BlogItem.propTypes = {
   index: PropTypes.number.isRequired,
   blogPost: PropTypes.object.isRequired,

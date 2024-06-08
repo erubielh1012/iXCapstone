@@ -9,7 +9,7 @@ export default function BlogItemText({ blogPost, headerFontSize }) {
         <div>
             <div style={{ display: "flex" }}>
                 <p className="date-author-text">
-                    {blogPost.author?.firstName} {blogPost.author?.lastName}
+                    {blogPost.author.firstName} {blogPost.author.lastName}
                 </p>
                 <div className="dot-divider"></div>
                 <p className="date-author-text">
@@ -28,7 +28,7 @@ export default function BlogItemText({ blogPost, headerFontSize }) {
             <p style={{ fontSize: "16px", color: "#667085", textAlign: "left" }}>
                 {blogPost.description ? blogPost.description.substring(0, 100) : "N/A"}...
             </p>
-            {/* <Categories blogPost={blogPost} /> */}
+            <Categories categories={blogPost.categories} />
         </div>
     );
 }
