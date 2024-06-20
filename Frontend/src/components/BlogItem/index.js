@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 import BlogItemText from "../BlogItemText";
 import EditButtons from "../EditButtons";
@@ -13,8 +12,7 @@ export default function BlogItem({
     index,
     blogPost,
     imageOrientation,
-    setBlogEdit,
-    setBlogDelete,
+    theStuff
 }) {
 
     const user = JSON.parse(localStorage.getItem("user"));
@@ -22,50 +20,43 @@ export default function BlogItem({
     const nav = useNavigate();
 
     const navToBlog = () => {
-      if (!setBlogEdit && !setBlogDelete) {
+      // if ((!setEditBlog && !setDeleteBlog)) {
         nav(`/blog/${blogPost.id}`);
-      }
-    };
-
-    const EditButtonsContainer = () => {
-      <EditButtons
-        onEdit={() => setBlogEdit(blogPost)}
-        onDelete={() => setBlogDelete(blogPost)}
-        navToBlog={() => navigate("/blog/" + blogPost.id)}
-      />
+      // }
     };
 
 
     if (imageOrientation === "top") {
         return (
+          <>
           <div
             key={index}
-            className="card-1 w-100"
-            // to={"/blog/" + blogPost.id}
-            onClick={(navToBlog)}
+            className="card-1 rounded"
+            onClick={() => nav(`/blog/${blogPost.id}`)}
           >
             <img src={blogPost.image} className="card-img-top" alt="..." />
             <div className="card-text-bottom">
-              <BlogItemText
-                blogPost={blogPost}
-                headerFontSize="20px"/>
-                 <EditButtonsContainer/>
+              <BlogItemText blogPost={blogPost} />
             </div>
+            {/* <div className="" style={{ border: "blue 2px solid"}}>
+              {(user?.id === blogPost.author.id) && setEditBlog && setDeleteBlog ? <EditButtonsContainer /> : null}
+              {theStuff}
+            </div> */}
           </div>
+            </>
         );
     } else {
         return (
           <div
             key={index}
             className="card-2"
-            onClick={navToBlog}
+            style={{borderRadius: "40px 0 40px 0"}}
+            onClick={() => nav(`/blog/${blogPost.id}`)}
           >
             <img src={blogPost.image} className="card-img-left" alt="..." />
             <div className="card-text-right">
-              <BlogItemText
-                blogPost={blogPost}
-                headerFontSize="20px" />
-                < EditButtonsContainer />
+              {/* {(user?.id === blogPost.author.id) && setEditBlog && setDeleteBlog ? <EditButtonsContainer /> : null} */}
+              <BlogItemText blogPost={blogPost} />
             </div>
           </div>
         );
@@ -75,4 +66,6 @@ BlogItem.propTypes = {
   index: PropTypes.number.isRequired,
   blogPost: PropTypes.object.isRequired,
   imageOrientation: PropTypes.string,
+  setEditBlog: PropTypes.func, 
+  setBlogDelete: PropTypes.func
 }

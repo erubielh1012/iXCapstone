@@ -5,10 +5,10 @@ const createBlog = async (blog) => {
     {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        // "Content-Type": "multipart/form-data",
         Authorization: "Bearer " + JSON.parse(localStorage.getItem("user")).token,
       },
-      body: JSON.stringify(blog),
+      body: blog,
     });
 
     if (!response.ok) {
@@ -48,7 +48,7 @@ const fetchBlogs = async () => {
   }
 
   const blogsApiData = await response.json();
-  return blogsApiData.data;
+  return blogsApiData;
 };
 
 const fetchBlogById = async (id) => {
@@ -64,7 +64,7 @@ const fetchBlogById = async (id) => {
   if (!data.ok) {
     try {
       let blogsApiData = await data.json();
-      throw blogsApiData.message || console.log(blogsApiData);
+      throw blogsApiData.message;
     } catch (err) {
       const error = new Error("Something went wrong")
       throw new Error(error);
@@ -72,7 +72,7 @@ const fetchBlogById = async (id) => {
   }
   
   const blogsApiData = await data.json();
-  return blogsApiData.data;
+  return blogsApiData;
 }
 
 const fetchBlogsByCategoryId = async ( categoryId ) => {
@@ -100,7 +100,7 @@ const fetchBlogsByCategoryId = async ( categoryId ) => {
       }
     }
     const blogsApiData = await data.json();
-    return blogsApiData.data;
+    return blogsApiData;
 };
 
 const fetchBlogsByAuthorId = async ( authorId ) => {
@@ -130,14 +130,14 @@ const fetchBlogsByAuthorId = async ( authorId ) => {
 }
 
 
-const updateBlogById = async (blog) => {
-  const response = await fetch("http://localhost:8000/api/blogs/" + blog.id, {
+const updateBlog = async (blog) => {
+  const response = await fetch("http://localhost:8000/api/blogs/" + blog.get("id"), {
     method: "PUT",
     headers: {
-      "Content-Type": "application/json",
+      // "Content-Type": "application/json",
       Authorization: "Bearer " + JSON.parse(localStorage.getItem("user")).token,
     },
-    body: JSON.stringify(blog),
+    body: blog,
   });
   if (!response.ok) {
     try {
@@ -184,7 +184,7 @@ const blogService = {
   fetchBlogById,
   fetchBlogsByCategoryId,
   fetchBlogsByAuthorId,
-  updateBlogById,
+  updateBlog,
   deleteBlogById,
 };
   

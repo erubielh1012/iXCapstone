@@ -51,14 +51,14 @@ const fetchCategories = async () => {
 
 const updateCategory = async (category) => {
   const data = await fetch(
-    "http://localhost:8000/api/categories/" + category.get("id"),
+    "http://localhost:8000/api/categories/" + category.id,
     {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + JSON.parse(localStorage.getItem("user")).token,
       },
-      body: category
+      body: JSON.stringify(category)
     });
 
   if (!data.ok) {

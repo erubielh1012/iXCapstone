@@ -1,40 +1,44 @@
 const Blog = require("../models/Blog");
 
+const { uploadToFirebaseStorage } = require("../service/google-cloud");
+
 // this is all the routes code for blogs
 const createBlog = async (req, res) => {
+    console.log("made it through");
     try {
-        console.log("CHKPT 1");
+        let imageURL = "";
+        if (req?.file?.path) {
+            imageURL = await uploadToFirebaseStorage(
+                req?.file?.path,
+                req?.file?.path
+            );
+        }
 
-        const categoryIds = req?.body?.categories.map((x) => x.id);
-
-        console.log("CHKPT 2");
-
+        console.log(req.body);
+        const categoryIds = JSON.parse(req?.body?.categories).map((x) => x.id);
         const blog = new Blog({
-            author: req.body.author,
-            image: req.body.image,
             title: req.body.title,
-            categories: categoryIds,
             description: req.body.description,
-            content: req.body.content,
+            image: imageURL,
+            content: JSON.parse(req.body.content),
+            author: req.body.author,
+            categories: categoryIds,
         });
 
-        console.log("CHKPT 3:", req.body.author);
 
         const newBlog = await blog.save();
-        console.log("CHKPT 4");
-        const blogRes = await Blog.findById(newBlog._id)
+
+        const blogRes = await Blog.findById(newBlog.id)
         .populate({ path: "categories" })
         .populate({ path: "author" });
 
-        console.log("CHKPT 5:", blogRes);
-        
-        res.status(200).json({ 
+        res.status(201).json({ 
             message: "Created new blog!", 
             data: blogRes });
     } catch (error) { 
         res.status(500).json({
             message: error.message,
-            data: [],
+            data: {},
         });
      }
   };
@@ -75,21 +79,21 @@ const getBlogById = async (req, res) => {
 // not sure how this one works
 const getBlogsByCategoryId = async (req, res) => {
     try {
-        console.log("We want to get the blogs with catId of", req.params.id);
+        // console.log("We want to get the blogs with catId of", req.params.id);
         let filter = {};
         if (req.params.id != "null" && req.params.id != "undefined"){
             filter = {categories: req.params.id};
         }
 
-        console.log("The filter is created:", filter);
+        // console.log("The filter is created:", filter);
 
         const blogs = await Blog.find(filter).populate({ path: "categories" }).populate({ path: "author" });
-        
+
         console.log("Filter applied to blogs:", blogs);
 
         res.status(200).json({ 
-            message: "Return blog by the category ID!", 
-            data: blogs });
+            message: "Return blog by the category ID!",
+            data: blogs});
     } catch (error) {
         res.status(500).json({
             message: error.message,
@@ -100,21 +104,21 @@ const getBlogsByCategoryId = async (req, res) => {
 
 const getBlogsByAuthorId = async (req,res) => {
     try {
-        console.log("Retrieving all the blogs by AUTHOR ID", req.params.id);
+        // console.log("Retrieving all the blogs by AUTHOR ID", req.params.id);
         let filter = {};
         if (req.params.id != "null" && req.params.id != "undefined"){
             filter = {author: req.params.id};
         }
 
-        console.log("The filter is created:", filter);
+        // console.log("The filter is created:", filter);
 
         const blogs = await Blog.find(filter).populate({ path: "categories" }).populate({ path: "author" });
         
-        console.log("Filter applied to blogs:", blogs);
+        // console.log("Filter applied to blogs:", blogs);
 
         res.status(200).json({ 
-            message: "Return blogs by the Author ID!", 
-            data: blogs });
+            message: "Return blogs by the Author ID!",
+            data: blogs});
     } catch (error) {
         res.status(500).json({
             message: error.message,
@@ -125,18 +129,21 @@ const getBlogsByAuthorId = async (req,res) => {
 
 const updateBlogById = async (req, res) => {
     try{
-        const blog = await Blog.findById(req.params.id).populate({
+        const blog = await Blog.findById(req.params.id)
+        .populate({
             path: "categories",
         }).populate({ path: "author" });
     
         if (blog) {
-            const categoryIds = req?.body?.categories.map((x) => x.id);
-            blog.image = req?.body?.image || blog.image;
+            const categoryIds = JSON.parse(req?.body?.categories).map((x) => x.id);
+            (blog.image = req?.file?.path
+                ? req?.protocol + "://" + req?.headers?.host + "/" + req.file.path
+                : blog.image);
             blog.title = req?.body?.title || blog.title;
             blog.description = req?.body?.description || blog.description;
             blog.categories = categoryIds ? categoryIds : blog.categories;
             blog.author = req?.body?.author || blog.author;
-            blog.content = req.body.content ? req.body.content : blog.content;
+            blog.content = req.body.content ? JSON.parse(req.body.content) : blog.content;
             const updatedBlog = await blog.save();
             const blogRes = await updatedBlog.populate({
                 path: "categories",
@@ -157,12 +164,12 @@ const updateBlogById = async (req, res) => {
 
 const deleteBlogById = async (req, res) => {
     try {
-        const blog = await Blog.findByIdAndRemove(req.params.id);
+        const blog = await Blog.findByIdAndDelete(req.params.id);
     
         if (blog) {
             return res.status(200).json({ message: "Blog deleted!", id: req.params.id})
         } else {
-            return res.status(404).json({ message: "Blog not found!" });
+            return res.status(404).json({ message: `Blog not found! ${req.params.id}` });
         }
     } catch (error) {
         res.status(500).json({

@@ -10,6 +10,7 @@ connectDB();
 const blogRoutes = require("./routes/blogRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const authRoutes = require("./routes/authRoutes");
+const path = require("path")
 
 const app = express();
 
@@ -22,10 +23,7 @@ app.use(express.json());
 app.use("/api/blogs", blogRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/auth", authRoutes);
-
-// app.get('/', (req, res) => {
-//     res.send("Sawubona, unjani!");
-// });
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 app.listen(port, () => {
     console.log(`IX blogging app listening on port ${port}`)

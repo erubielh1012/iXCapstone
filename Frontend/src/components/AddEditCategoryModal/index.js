@@ -2,12 +2,9 @@ import React, { useEffect, useState, useMemo } from "react";
 import { Modal } from "bootstrap";
 
 export default function AddEditCategoryModal({
-  addCategory,
-  editCategory,
-  createCategory,
-  updateCategory,
-  onClose,
+  addCategory, editCategory, createCategory, updateCategory, onClose,
 }) {
+  
   const modalEl = document.getElementById("addEditCategoryModal");
   const addEditCategoryModal = useMemo(() => {
     return modalEl ? new Modal(modalEl) : null;

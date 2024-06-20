@@ -14,10 +14,6 @@ import ErrorToast from "../../components/ErrorToast";
 import AddEditCategoryModal from "../../components/AddEditCategoryModal";
 import DeleteCategoryModal from "../../components/DeleteCategoryModal";
 
-//Importing Dummy Data
-// const data = require("../../dummy-data.json");
-// let blogPosts = data.blogPosts;
-// const categories = data.categories;
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState();
@@ -39,6 +35,7 @@ export default function CategoriesPage() {
         setLoading(true)
         const res = await categoryService.fetchCategories();
         setCategories(res.data);
+        setIsSuccess(true);
         setLoading(false);
       } catch (err) {
         setIsError(true);

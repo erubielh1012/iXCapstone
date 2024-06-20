@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 import "./index.css";
 
-export default function Categories({ categories }) {
+export default function Categories({ categories, removeCategory }) {
   if (!categories && !categories?.length) return null;
   return (
     <div className="flex-wrap">
@@ -17,6 +17,7 @@ export default function Categories({ categories }) {
               color: category.color,
               backgroundColor: category.color + "33",
             }}
+            onClick={() => removeCategory ? removeCategory(category) : null}
           >
             {category.title}
           </p>

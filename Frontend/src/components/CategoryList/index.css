@@ -1,3 +1,28 @@
+.corner-clip-top-bottom {
+  -webkit-clip-path: polygon(
+    0 0,
+    50% 15vmin,
+    100% 0,
+    100% calc(100% - 15vmin),
+    50% 100%,
+    0 calc(100% - 15vmin)
+  );
+  clip-path: polygon(
+    0 0,
+    50% 15vmin,
+    100% 0,
+    100% calc(100% - 15vmin),
+    50% 100%,
+    0 calc(100% - 15vmin)
+  );
+  margin-top: -15vmin;
+}
+
+.bg-grey {
+  background-color: #eaeaea;
+}
+
+
 .category-list {
     padding: 16px 0px;
     width: 100%;

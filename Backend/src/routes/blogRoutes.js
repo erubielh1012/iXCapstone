@@ -4,9 +4,11 @@ const router = express.Router();
 const blogController = require("../controllers/blogs")
 
 const { protect } = require("../middleware/authMiddleware");
+const { upload } = require("../middleware/multer");
 
 // CREATE blogs
-router.post("/", protect, (req, res) => {
+router.post("/", protect, upload.single("image"), (req, res) => {
+    console.log("made it here first");
     blogController.createBlog(req,res);
     // res.status(200).json({ message: "Create new blog!" });
 });
@@ -17,7 +19,7 @@ router.get("/", (req, res) => {
     // res.status(200).json({ message: "Return all blogs!", data:[]})
 });
 
-// READ blogs by id
+// READ blog by id
 router.get("/:id", (req, res) => {
     blogController.getBlogById(req,res);
 });
@@ -33,12 +35,12 @@ router.get("/author/:id", (req,res) => {
 });
 
 // UPDATE 
-router.put("/:id", protect, (req,res) => {
+router.put("/:id", protect, upload.single("image"), (req,res) => {
     blogController.updateBlogById(req,res);
 });
 
 // DELETE
-router.put("/:id", protect, (req,res) => {
+router.delete("/:id", protect, (req,res) => {
     blogController.deleteBlogById(req,res);
 });
 

@@ -3,6 +3,9 @@ const router = express.Router();
 
 const authController = require("../controllers/auth")
 
+const { protect } = require("../middleware/authMiddleware");
+const { upload } = require("../middleware/multer");
+
 // CREATE authors
 router.post("/login", (req, res) => {
     authController.login(req,res);
@@ -15,6 +18,11 @@ router.post("/register", (req,res) => {
 // GET author information
 router.get("/:id", (req,res) =>{
     authController.getAuthorInfo(req,res);
+});
+
+// update user
+router.put("/user/:id", protect, upload.single("image"), (req,res) => {
+    authController.updateUser(req,res);
 });
 
 module.exports = router;

@@ -66,23 +66,9 @@ const getAuthorInfo = async (id) => {
       return authorData;
 };
 
-const getUser = async (authorId) => {
+const updateUser = async (user) => {
   const response = await fetch(
-    `http://localhost:8000/api/auth/user/${authorId}`
-  );
-
-  if (!response.ok) {
-    let res = await response.json();
-    throw res;
-  }
-
-  const responseData = await response.json();
-  return responseData;
-};
-
-const updateUser = async (userId, userData) => {
-  const response = await fetch(
-    `http://localhost:8000/api/auth/user/${userId}`,
+    `http://localhost:8000/api/auth/user/${user.get("id")}`,
     {
       method: "PUT",
       headers: {
@@ -90,7 +76,7 @@ const updateUser = async (userId, userData) => {
         Authorization:
           "Bearer " + JSON.parse(localStorage.getItem("user")).token,
       },
-      body: userData,
+      body: user
     }
   );
 
@@ -107,8 +93,6 @@ const authService = {
   getAuthorInfo,
   register,
   login,
-  getUser,
-  updateUser,
   updateUser,
 };
 

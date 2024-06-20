@@ -58,12 +58,13 @@ const updateCategory = async (req, res) => {
         const category = await Category.findById(req.params.id);
     
         if (category) {
-            category.title = req.category.title || category.title;
-            category.description = req.category.description || category.description;
-            category.color = req.category.color || category.color;
+            category.title = req.body.title || category.title;
+            category.description = req.body.description || category.description;
+            category.color = req.body.color || category.color;
             const updatedCategory = await category.save()
             res.status(200).json({ 
                 message: "Updated category by ID!", 
+                // headers: req.headers,
                 data: updatedCategory });
         } else {
             res.status(404).json({ message: "Category not found!", data: [] });

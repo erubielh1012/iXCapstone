@@ -3,14 +3,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 const generateToken = (id) => {
-    return jwt.sign({ 
-        id
-
-        // firstName: user.id,
-        // lastName: user.id
-        // email: user.id,
-        // bio: user.id,
-    }, process.env.JWT_SECRET, {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
         // this lets the system know how long to let the user be verified before expiration
         // expiresIn: "1d",
     });
@@ -45,7 +38,7 @@ const register = async (req, res) => {
       });
       const newUser = await user.save();
       let resUser = newUser.toJSON();
-      resUser.token = generateToken(resUser._id);
+      resUser.token = generateToken(resUser.id);
     //   this is a security measure for anyone trying to spoof into the payloads being sent 
       delete resUser.password;
       res.status(201).json({ message: "New user created!", data: resUser });
@@ -76,7 +69,7 @@ const login = async (req, res) => {
         }
 
         let resUser = user.toJSON();
-        resUser.token = generateToken(resUser._id);
+        resUser.token = generateToken(resUser.id);
 
         delete resUser.password;
         res.status(200).json({ message: "Login successful!", data: resUser });
@@ -84,6 +77,7 @@ const login = async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   };
+
 
   const getAuthorInfo = async(req,res) => {
     try {
@@ -100,11 +94,43 @@ const login = async (req, res) => {
     }
 };
 
+const updateUser = async (req,res) => {
+  try {
+    const author = await User.findById(req.params.id);
+    
+    if (author) {
+      author.firstName = req?.body?.firstName || author.firstName;
+      author.lastName = req?.body?.lastName || author.lastName;
+      author.bio = req?.body?.bio || author.bio;
+      author.email = req?.body?.email || author.email;
+      // author.image = req.body.image || author.image;
+      (author.image = req?.file?.path
+        ? req?.protocol + "://" + req?.headers?.host + "/" + req.file.path
+        : author.image);
+      author.password = author.password;
+
+      const updatedUser = await author.save()
+      
+      res.status(200).json({ 
+          message: "Updated author ID!", 
+          // headers: req.headers,
+          data: updatedUser });
+    } else {
+        res.status(404).json({ message: "User not found!", data: [] });
+    }
+  } catch (error) {
+      res.status(500).json({
+          message: error.message,
+          data: [],
+      });
+  }
+}
+
   
   module.exports = {
     register,
     login,
     getAuthorInfo,
+    updateUser,
   };
-
 
