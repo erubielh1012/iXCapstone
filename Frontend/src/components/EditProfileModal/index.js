@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Modal } from 'bootstrap';
 import FormImage from "../FormImage";
-import { Form } from 'react-router-dom';
 
 export default function EditProfileModal({
     updateProfile, editProfile, info, onClose

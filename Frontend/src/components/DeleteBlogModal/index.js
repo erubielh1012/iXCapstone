@@ -1,6 +1,5 @@
-import React, { useMemo, useEffect, useState } from "react";
+import React, { useMemo, useEffect } from "react";
 import { Modal } from "bootstrap";
-import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 
 import { deleteBlogById, setDeleteBlog } from "../../features/blogSlice";
@@ -85,8 +84,3 @@ export default function DeleteBlogModal() {
     </div>
   );
 }
-
-DeleteBlogModal.prototype = {
-  deleteBlog: PropTypes.object,
-  removeBlog: PropTypes.func,
-};

@@ -9,8 +9,6 @@ import Loading from "../../components/Loading";
 
 import "./index.css";
 
-import authService from "../../services/authService";
-
 export default function LoginPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -45,7 +43,7 @@ export default function LoginPage() {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (

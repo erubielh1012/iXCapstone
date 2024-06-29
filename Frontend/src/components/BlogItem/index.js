@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
 import BlogItemText from "../BlogItemText";
-import EditButtons from "../EditButtons";
 
 import "../../App.css";
 import "./index.css";
@@ -12,19 +11,11 @@ export default function BlogItem({
     index,
     blogPost,
     imageOrientation,
-    theStuff
 }) {
 
     const user = JSON.parse(localStorage.getItem("user"));
     
     const nav = useNavigate();
-
-    const navToBlog = () => {
-      // if ((!setEditBlog && !setDeleteBlog)) {
-        nav(`/blog/${blogPost.id}`);
-      // }
-    };
-
 
     if (imageOrientation === "top") {
         return (

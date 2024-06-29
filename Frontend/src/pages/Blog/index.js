@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from "react";
-import { useParams, Link } from 'react-router-dom';
+import React, {useEffect} from "react";
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 
 import Loading from "../../components/Loading";
@@ -18,10 +18,10 @@ export default function BlogPage() {
 
     const {
       blog, 
-      isError: isError,
-      isSuccess: isSuccess,
-      isLoading: isLoading,
-      message: message
+      isError,
+      isSuccess,
+      isLoading,
+      message
     } = useSelector((state) => state.blogs)
 
     // Debugging logs

@@ -1,56 +1,54 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Modal } from "bootstrap";
 
-export default function AddEditCategoryModal({
-  addCategory, editCategory, createCategory, updateCategory, onClose,
-}) {
+import { useDispatch, useSelector } from "react-redux";
+import { 
+  createCategory,
+  updateCategory,
+  setAddCategory,
+  setEditCategory,
+  resetSuccessAndError
+ } from "../../features/categoriesSlice";
+
+export default function AddEditCategoryModal() {
+
+  const dispatch = useDispatch();
+  const { addCategory, editCategory } = useSelector((state) => state.categories);
   
-  const modalEl = document.getElementById("addEditCategoryModal");
-  const addEditCategoryModal = useMemo(() => {
+  const modalEl = document.getElementById("addEditModal");
+  const addEditModal = useMemo(() => {
     return modalEl ? new Modal(modalEl) : null;
   }, [modalEl]);
 
-  const [category, setCategory] = useState({
-    title: "",
-    description: "",
-    color: "",
-  });
+  const [category, setCategory] = useState(null);
 
   useEffect(() => {
     if (addCategory) {
       setCategory(addCategory);
-      addEditCategoryModal?.show();
+      addEditModal?.show();
     } else if (editCategory) {
       setCategory(editCategory);
-      addEditCategoryModal?.show();
+      addEditModal?.show();
     }
-  }, [addEditCategoryModal, addCategory, editCategory]);
-
-  const resetCategory = () => {
-    setCategory({
-      title: "",
-      description: "",
-      color: "",
-    });
-  };
+  }, [addEditModal, addCategory, editCategory]);
 
   const onSubmit = (e) => {
     e?.preventDefault();
     if (isFormValid()) {
       if (addCategory) {
-        createCategory(category);
+        dispatch(createCategory(category));
       } else if (editCategory) {
-        updateCategory(category);
+        dispatch(updateCategory(category));
       }
-      resetCategory();
-      addEditCategoryModal?.hide();
+      dispatch(resetSuccessAndError());
+      addEditModal?.hide();
     }
   };
 
   const onCloseModal = () => {
-    resetCategory();
-    onClose();
-    addEditCategoryModal.hide();
+    dispatch(setAddCategory(null));
+    dispatch(setEditCategory(null));
+    addEditModal.hide();
   };
 
   const isFormValid = () => {
@@ -62,7 +60,7 @@ export default function AddEditCategoryModal({
   return (
     <div
       className="modal fade"
-      id="addEditCategoryModal"
+      id="addEditModal"
       aria-labelledby="addEditCategoryModalLabel"
       aria-hidden="true"
     >

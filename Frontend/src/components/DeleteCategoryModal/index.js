@@ -1,13 +1,18 @@
-import React, { useMemo, useEffect, useState } from "react";
+import React, { useMemo, useEffect } from "react";
 import { Modal } from "bootstrap";
-import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function DeleteCategoryModal({
-  deleteCategory,
-  removeCategory,
-  onClose,
-}) {
-  const [category, setCategory] = useState();
+import { 
+  deleteCategory, 
+  resetSuccessAndError,
+  setDeleteCategory 
+} from "../../features/categoriesSlice";
+
+export default function DeleteCategoryModal() {
+  const dispatch = useDispatch();
+  const {
+    deleteCat
+  } = useSelector((state) => state.categories)
 
   const modalEl = document.getElementById("deleteCategoryModal");
   const deleteCategoryModal = useMemo(() => {
@@ -15,29 +20,20 @@ export default function DeleteCategoryModal({
   }, [modalEl]);
 
   useEffect(() => {
-    if (deleteCategory) {
-      setCategory(deleteCategory);
+    if (deleteCat) {
       deleteCategoryModal?.show();
     }
-  }, [deleteCategory, deleteCategoryModal]);
-
-  const resetCategory = () => {
-    setCategory({
-      title: "",
-      description: "",
-      color: "#000000",
-    });
-  };
+  }, [deleteCat, deleteCategoryModal]);
 
   const onCloseModal = () => {
-    resetCategory();
-    onClose();
+    dispatch(resetSuccessAndError());
+    dispatch(setDeleteCategory(null));
     deleteCategoryModal?.hide();
   };
 
   const onDelete = () => {
-    removeCategory(deleteCategory);
-    resetCategory();
+    dispatch(deleteCategory(deleteCat));
+    dispatch(resetSuccessAndError());
     deleteCategoryModal?.hide();
   };
 
@@ -64,7 +60,7 @@ export default function DeleteCategoryModal({
           <div className="modal-body">
             <p>Are You sure you want to delete this Category?</p>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <h5 style={{ marginLeft: "8px" }}>{category?.title}</h5>
+              <h5 style={{ marginLeft: "8px" }}>{deleteCat?.title}</h5>
             </div>
           </div>
 
@@ -89,8 +85,3 @@ export default function DeleteCategoryModal({
     </div>
   );
 }
-
-DeleteCategoryModal.prototype = {
-  deleteCategory: PropTypes.object,
-  removeCategory: PropTypes.func.isRequired,
-};

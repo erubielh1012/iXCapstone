@@ -15,7 +15,7 @@ export default function Categories({ categories, removeCategory }) {
             className="category-tag"
             style={{
               color: category.color,
-              backgroundColor: category.color + "33",
+              backgroundColor: category.color + "30",
             }}
             onClick={() => removeCategory ? removeCategory(category) : null}
           >

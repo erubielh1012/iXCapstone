@@ -1,4 +1,4 @@
-import React, {useDebugValue, useEffect, useState} from "react";
+import React, { useEffect } from "react";
 
 import Heading from "../../components/Heading";
 import Navbar from "../../components/Navbar";
@@ -6,7 +6,6 @@ import BlogGrid from "../../components/BlogGrid";
 import Footer from "../../components/Footer";
 import SubHeading from "../../components/SubHeading";
 import CategoryList from "../../components/CategoryList";
-import Loading from "../../components/Loading";
 
 import SuccessToast from "../../components/SuccessToast";
 import ErrorToast from "../../components/ErrorToast";
@@ -22,25 +21,24 @@ export default function Home() {
     blogs,
     isError: isBlogsError,
     isSuccess: isBlogsSuccess,
-    isLoading: isLoadingBlogs,
     message: blogsMessage,
   } = useSelector((state) => state.blogs);
   const {
     categories, 
     isError: isCategoriesError, 
     isSuccess: isCategoriesSuccess,
-    isLoading: isLoadingCategories,
     message: categoriesMessage,
   } = useSelector((state) => state.categories);
 
   useEffect(() => {
     dispatch(fetchBlogs());
     dispatch(fetchCategories());
+
     return () => {
       dispatch(resetBlogs());
       dispatch(resetCategories());
     };
-  }, [dispatch]);
+  }, []);
 
 
   return (
@@ -55,7 +53,7 @@ export default function Home() {
         <div className="container">
           <div className="py-5">
             <SubHeading subHeading={"Categories"} />
-            <CategoryList categories={categories}></CategoryList>
+            <CategoryList isHome={true} categories={categories.slice(0,3)}></CategoryList>
           </div>
         </div>
       </div>

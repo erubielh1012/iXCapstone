@@ -38,9 +38,7 @@ export default function ProfilePage() {
     useEffect(() => {
       dispatch(fetchAuthor(authorId));
       dispatch(fetchBlogsByAuthorId(authorId));
-      return () => {
-        dispatch(reset())
-      }
+      return () => {dispatch(reset())}
     }, [authorId]);
 
     const onBlogAdd = () => {

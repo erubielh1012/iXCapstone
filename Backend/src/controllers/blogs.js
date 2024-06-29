@@ -89,7 +89,7 @@ const getBlogsByCategoryId = async (req, res) => {
 
         const blogs = await Blog.find(filter).populate({ path: "categories" }).populate({ path: "author" });
 
-        console.log("Filter applied to blogs:", blogs);
+        // console.log("Filter applied to blogs:", blogs);
 
         res.status(200).json({ 
             message: "Return blog by the category ID!",

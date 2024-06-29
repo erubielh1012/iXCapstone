@@ -8,8 +8,6 @@ import "./index.css";
 
 import SuccessToast from "../../components/SuccessToast";
 import ErrorToast from "../../components/ErrorToast";
-import Loading from "../../components/Loading";
-import authService from "../../services/authService";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -46,11 +44,6 @@ export default function RegisterPage() {
     e.preventDefault();
     dispatch(register(formData));
   };
-
-  // if (loading) {
-  //   return <Loading />;
-  // }
-
 
   return (
     <>

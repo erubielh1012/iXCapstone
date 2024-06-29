@@ -51,5 +51,5 @@ export default function BlogGrid({ blogPosts }) {
 }
 
 BlogGrid.propTypes = {
-    blogPost: PropTypes.array.isRequired,
+    blogPosts: PropTypes.array.isRequired,
 }

@@ -14,6 +14,14 @@ const path = require("path")
 
 const app = express();
 
+// Serve Frontend from Express Backend ------------------------------
+app.use(express.static(path.join(__dirname, "../../frontend/build")));
+app.get("*", (req, res) =>
+  res.sendFile(
+    path.resolve(__dirname, "..", "..", "frontend", "build", "index.html")
+  )
+);
+
 // Cross-origin resource sharing is a mechanism that allows a web page to access restricted resources from a server on a domain different than the domain that served the web page.
 // Enabling CORS for any unknown origin
 app.use(cors());

@@ -55,7 +55,7 @@ const getAuthorInfo = async (id) => {
       if (!data.ok) {
         try {
           let authorData = await data.json();
-          throw authorData.message || console.log(authorData);
+          throw authorData.message;
         } catch (err) {
           const error = new Error("Something went wrong")
           throw new Error(error);

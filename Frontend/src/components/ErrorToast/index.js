@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { Toast } from "bootstrap";
 
 export default function ErrorToast({ show, message, onClose }) {
