@@ -15,10 +15,10 @@ const path = require("path")
 const app = express();
 
 // Serve Frontend from Express Backend ------------------------------
-app.use(express.static(path.join(__dirname, "../../frontend/build")));
+app.use(express.static(path.join(__dirname, "../../Frontend/build")));
 app.get("*", (req, res) =>
   res.sendFile(
-    path.resolve(__dirname, "..", "..", "frontend", "build", "index.html")
+    path.resolve(__dirname, "..", "..", "Frontend", "build", "index.html")
   )
 );
 
